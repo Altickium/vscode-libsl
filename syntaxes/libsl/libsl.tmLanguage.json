@@ -1,0 +1,775 @@
+{
+    "information_for_contributors": [
+      "Hello world!"
+    ],  
+    "name": "LibSL",
+    "scopeName": "source.libsl",
+    "patterns": [
+      {
+        "begin": "\\b(libsl)\\b\\s*",
+        "beginCaptures": {
+          "1": {
+            "name": "keyword.other.libsl.libsl"
+          }
+        },
+        "end": "\\s*(;)",
+        "endCaptures": {
+          "1": {
+            "name": "punctuation.terminator.libsl"
+          }
+        },
+        "name": "meta.libsl.libsl",
+        "contentName": "storage.modifier.libsl.libsl",
+        "patterns": [
+          {
+            "include": "#comments"
+          },
+          {
+            "include": "#double-quoted-string"
+          }
+        ]
+      },
+      {
+        "begin": "\\b(library)\\b\\s*",
+        "beginCaptures": {
+          "1": {
+            "name": "keyword.other.libsl.library"
+          },
+          "2": {
+            "name": "storage.modifier.libsl"
+          }
+        },
+        "end": "\\s*(;)",
+        "endCaptures": {
+          "1": {
+            "name": "punctuation.terminator.libsl"
+          }
+        },
+        "name": "meta.library.libsl",
+        "patterns": [
+          {
+            "include": "identifier"
+          },
+          {
+            "include": "#comments"
+          },
+          {
+            "patterns":[
+              {
+                "match": "\\b(version)\\b\\s*",
+                "name": "keyword.other.libsl.version"
+              },
+              {
+                "include": "#double-quoted-string",
+                "name": "libsl.version.ACTUAL_VER"
+              }
+            ],  
+            "name": "meta.version.libsl"
+          },
+          {
+            "patterns":[
+              {
+                "match": "\\b(language)\\b\\s*",
+                "name": "keyword.other.libsl.language"
+              },
+              {
+                "include": "#double-quoted-string"
+              }
+            ],  
+            "name": "meta.language.libsl",
+            "contentName": "storage.modifier.language.libsl"
+          },
+          {
+            "patterns":[
+              {
+                "match": "\\b(url)\\b\\s*",
+                "name": "keyword.other.libsl.url"
+              },
+              {
+                "include": "#double-quoted-string"
+              }
+            ],  
+            "name": "meta.url.libsl",
+            "contentName": "storage.modifier.url.libsl"
+          }
+        ]
+      },
+      {
+        "include": "#comments-libsldoc"
+      },
+      {
+        "include": "#global-statement"
+      }
+    ],
+    "repository": {
+      "global-statement": {
+        "patterns":[
+          {
+            "include": "#import-statement"
+          },
+          {
+            "include": "#include-statement"
+          },
+          {
+            "include": "#types-section"
+          },
+          {
+            "include": "#typealias-statement"
+          },
+          {
+            "include": "#enum-block"
+          },
+          {
+            "include": "#annotation-decl"
+          },
+          {
+            "include": "#action-decl"
+          },
+          {
+            "include": "#top-level-decl"
+          },
+          {
+            "include": "#global-statement"
+          }
+        ]
+      },
+      "top-level-decl":{
+        "patterns":[
+          {
+            "include": "#automaton-decl"
+          },
+          {
+            "include": "#function-decl"
+          },
+          {
+            "include": "#variable-decl"
+          }
+        ]
+      },
+      "type-alias-statement":{
+        "patterns":[
+        {
+          "include": "#annotation-usage"
+        },
+        {
+          "begin": "\\b(typealias)\\b\\s*",
+          "beginCaptures": {
+            "0": {
+              "name": "keyword.other.libsl.typealias"
+            }
+          },
+          "end": "\\s*(;)",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.terminator.libsl"
+            }
+          },
+          "name": "meta.typealias.libsl",
+          "contentName": "storage.modifier.libsl.libsl",
+          "patterns": [
+            {
+              "include": "#type-identifier"
+            },
+            {
+              "match": "\\s*(=)",
+              "name": "punctuation.assignop.libsl"
+            }
+          ] 
+        }
+        ]
+      },
+      "type-def-block":{
+        "patterns":[
+          {
+            "include": "#annotation-usage"
+          },
+          {
+            "match": "\\b(type)\\b\\s*",
+            "name": "keyword.other.libsl.type"
+          },
+          {
+            "include": "#generic"
+          },
+          {
+            "include": "#target-type"
+          },
+          {
+            "begin": "{",
+            "beginCaptures": {
+              "0": {
+                "name": "punctuation.lbrace.libsl"
+              }
+            },
+            "end": "}",
+            "endCaptures": {
+              "0": {
+                "name": "punctuation.rbrace.libsl"
+              }
+            },
+            "name": "meta.typedefblock.typedefblockstatement.libsl",
+            "contentName": "storage.modifier.libsl.libsl",
+            "patterns": [
+              {
+                "include": "#type-def-block-statement"
+              }
+            ] 
+          }
+        ]
+      },
+      "target-type":{
+        "patterns":[
+          {
+            "patterns":[
+              {
+                "match": "\\b(is)\\b\\s*",
+                "name": "keyword.other.libsl.is"
+              },
+              {
+                "include": "#type-identifier"
+              }
+            ]
+          },
+          {
+            "include": "#identifier"
+          },
+          {
+            "include": "#type-list"
+          }
+        ]
+      },
+      "type-list":{
+        "patterns":[
+          {
+            "include": "#type-identifier"
+          },
+          {
+            "patterns":[
+              {
+                "match": "\\s*(,)",
+                "name": "punctuation.comma.libsl"
+              },
+              {
+                "include": "#type-list"
+              }
+            ]
+          }
+        ]
+      },
+      "type-def-block-statement":{
+        "patterns":[
+          {
+            "include": "#variable-decl"
+          },
+          {
+            "include": "#function-decl"
+          }
+        ]
+      },
+      "enum-block":{
+        "patterns":[
+          {
+            "include": "#annotation-usage"
+          },
+          {
+            "match": "\\b(enum)\\b\\s*",
+            "name": "keyword.other.libsl.enum"
+          },
+          {
+            "include": "#type-identifier"
+          },
+          {
+            "begin": "{",
+            "beginCaptures": {
+              "0": {
+                "name": "punctuation.lbrace.libsl"
+              }
+            },
+            "end": "}",
+            "endCaptures": {
+              "0": {
+                "name": "punctuation.rbrace.libsl"
+              }
+            },
+            "name": "meta.enum.enumblockstatement.libsl",
+            "patterns": [
+              {
+                "include": "#enum-block-statement"
+              }
+            ] 
+          }
+        ]
+      },
+      "enum-block-statement":{
+        "patterns":[
+          {
+            "include": "#identifier"
+          },
+          {
+            "begin": "=",
+            "beginCaptures": {
+              "0": {
+                "name": "punctuation.lbrace.libsl"
+              }
+            },
+            "end": ";",
+            "endCaptures": {
+              "0": {
+                "name": "punctuation.semicolon.libsl"
+              }
+            },
+            "name": "meta.enum.enumblockstatement.libsl",
+            "patterns": [
+              {
+                "include": "#integer-number"
+              }
+            ] 
+          }
+        ]
+      },
+      "types-section": {
+        "match": "\\b(types)\\b\\s*",
+        "name": "keyword.other.libsl.types",
+        "patterns":[
+        {
+        "begin": "{",
+        "beginCaptures":{
+          "0": {
+          "name": "punctuation.lbrace.libsl"
+          }
+        },
+        "end": "}",
+        "endCaptures": {
+          "0": {
+            "name": "punctuation.rbrace.libsl"
+          }
+        },
+        "patterns": [
+          {
+            "include": "#semantic-type-decl"
+          }
+        ]
+        }
+        ]
+      },
+      "semantic-type-decl":{
+        "patterns": [
+          {
+            "include": "#simple-semantic-type"
+          },
+          {
+            "include": "#enum-semantic-type"
+          }
+        ]
+      },
+      "simple-semantic-type":{
+        "patterns": [
+          {
+            "include": "#annotation-usage"
+          },
+          {
+            "include": "#type-identifier"
+          },
+          {
+            "begin": "\\(",
+            "beginCaptures": {
+              "0": {
+                "name": "punctuation.lbracket.libsl"
+              }
+            },
+            "end": "\\)\\s*\\b(;)",
+            "endCaptures": {
+              "0": {
+                "name": "punctuation.rbracket.libsl"
+              },
+              "1":{
+                "name": "punctuation.semicolon.libsl"
+              }
+            },
+            "contentName": "storage.modifier.libsl.libsl",
+            "name": "storage.type.object.array.java",
+            "patterns": [
+                {
+                  "include": "#type-identifier",
+                  "name": "enumSemanticType.realName"
+                }
+              ]
+            }
+        ]
+      },
+      "enum-semantic-type":{
+        "patterns": [
+          {
+            "include": "#annotation-usage"
+          },
+          {
+            "include": "#type-identifier"
+          },
+          {
+            "begin": "\\(",
+            "beginCaptures": {
+              "0": {
+                "name": "punctuation.lbracket.libsl"
+              }
+            },
+            "end": "\\)",
+            "endCaptures": {
+              "0": {
+                "name": "punctuation.rbracket.libsl"
+              }
+            },
+            "contentName": "storage.modifier.libsl.libsl",
+            "name": "storage.type.object.array.java",
+            "patterns": [
+                {
+                  "include": "#type-identifier",
+                  "name": "enumSemanticType.realName"
+                }
+              ]
+            },
+            {
+              "begin": "{",
+            "beginCaptures": {
+              "0": {
+                "name": "punctuation.lbrace.libsl"
+              }
+            },
+            "end": "}",
+            "endCaptures": {
+              "0": {
+                "name": "punctuation.rbrace.libsl"
+              }
+            },
+            "name": "storage.type.enum.semantic.type.libsl",
+            "patterns": [
+                {
+                  "include": "#enum-semantic-type-entry",
+                  "name": "enumSemanticType.realName"
+                }
+              ]
+            }
+        ]
+      },
+      "enum-semantic-type-entry":{
+        "patterns":[
+          {
+            "include": "#identifier"
+          },
+          {
+            "begin": ":",
+            "beginCaptures": {
+              "0": {
+                "name": "punctuation.colon.libsl"
+              }
+            },
+            "end": ";",
+            "endCaptures": {
+              "0": {
+                "name": "punctuation.semicolon.libsl"
+              }
+            },
+            "patterns": [
+                {
+                  "include": "#expression-atomic"
+                }
+              ]
+          }
+        ]
+      },
+      "annotation-decl":{
+        "patterns":[
+          {
+            "match": "\\b(annotation)\\b\\s*",
+            "name": "keyword.other.libsl.annotation"
+          },
+          {
+            "include": "#identifier",
+            "name": "annotation.decl.name"
+          },
+          {
+            "begin": "\\(",
+            "beginCaptures": {
+              "0": {
+                "name": "punctuation.lbracket.libsl"
+              }
+            },
+            "end": "\\)\\s*;",
+            "endCaptures": {
+              "0": {
+                "name": "punctuation.rbracket.libsl"
+              },
+              "1": {
+                "name": "punctuation.semicolon.libsl"
+              }
+            },
+            "patterns": [
+                {
+                  "include": "#annotation-decl-params"
+                }
+              ]
+          }
+        ]
+      },
+      "annotation-decl-params":{
+        "patterns":[
+          {
+            "include": "#annotation-decl-params-part"
+          },
+          {
+            "patterns":[
+              {
+                "match": "\\s*(,)",
+                "name": "punctuation.comma.libsl"
+              },
+              {
+                "include": "#annotation-decl-params-part"
+              }
+            ]
+          }
+        ]
+      },
+      "annotation-decl-params-part":{
+        "patterns":[
+          {
+            "include": "#name-with-type"
+          },
+          {
+            "patterns":[
+              {
+                "match": "=",
+                "name": "punctuation.assignop.libsl"
+              },
+              {
+                "include": "#expression"
+              }
+            ]
+          }
+        ]
+      },
+      "expression":{
+
+      },
+      "action-decl":{
+          "patterns":[
+            {
+              "include": "#annotation-usage"
+            },
+            {
+              "match": "\\b(define)\\b\\s*",
+              "name": "keyword.other.libsl.define"
+            },
+            {
+              "match": "\\b(action)\\b\\s*",
+              "name": "keyword.other.libsl.action"
+            },
+            {
+              "begin": "\\(",
+            "beginCaptures": {
+              "0": {
+                "name": "punctuation.lbracket.libsl"
+              }
+            },
+            "end": "\\)",
+            "endCaptures": {
+              "0": {
+                "name": "punctuation.rbracket.libsl"
+              }
+            },
+            "patterns": [
+                {
+                  "include": "#action-decl-param-list"
+                }
+              ]
+            },
+            {
+              "match": "\\s*(:)",
+              "name": "punctuation.colon.libsl",
+              "patterns":[
+                {
+                  "include": "#type-identifier",
+                  "name": "actionDecl.actionType"
+                }
+              ]
+            },
+            {
+              "match": "\\s*(;)",
+              "name": "punctuation.semicolon.libsl"
+            }
+          ]
+      },
+      "action-decl-param-list":{
+        "patterns":[
+          {
+            "include": "#action-parameter"
+          },
+          {
+            "match": "\\s*(,)",
+            "name": "punctuation.comma.libsl",
+            "patterns":[
+            {
+              "include": "#action-parameter"
+            }
+            ]
+          }
+        ]
+      },
+      "action-parameter":{
+        "patterns":[
+          {
+            "include": "#annotation-usage"
+          },
+          {
+            "include": "#identifier",
+            "name": "actionParameter.name"
+          },
+          {
+            "match": "\\s*(:)",
+            "name": "punctuation.colon.libsl"
+          },
+          {
+            "include": "#type-identifier",
+            "name": "actionParameter.type"
+          }
+        ]
+      },
+      "type-identifer":{
+        "patterns":[
+          {
+            "include": "period-separated-full-name"
+          }
+        ]
+      },
+      "period-separated-full-name":{
+        "include": "identifier"
+      },
+      "automaton-decl": {
+        "begin": "\\b(automaton)\\b\\s*",
+        "beginCaptures":{
+        "1": {
+          "name": "keyword.other.libsl.automaton"
+        },
+        "2": {
+          "name": "storage.modifier.libsl"
+        }
+        },
+        "end": "}",
+        "endCaptures": {
+          "0": {
+            "name": "punctuation.section.class.end.bracket.curly.java"
+          }
+        },
+        "patterns": [
+          {
+            "include": "#global-types-body"
+          },
+          {
+            "match": "\\b(initstate|state|finishstate)\\b\\s*",
+            "name": "support.type.other.libsl.variable"
+          },
+          {
+            "match": "\\b(shift)\\b\\s*",
+            "name": "support.function.other.libsl.variable"
+          }
+        ]
+      },
+      "variable-decl": {
+        "patterns": [
+          {
+            "begin": "\\b(var)\\b\\s*",
+            "beginCaptures":{
+            "1": {
+            "name": "keyword.other.libsl.variable"
+            },
+            "2": {
+            "name": "storage.modifier.libsl"
+            }
+          },
+          "end": ";",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.section.class.end.bracket.curly.java"
+            }
+          },
+          "patterns":[
+            {
+              "include": "name-with-type"
+            }
+          ]
+        },
+          {
+            "begin": "\\b(var)\\b\\s*",
+            "beginCaptures":{
+            "1": {
+            "name": "keyword.other.libsl.variable"
+            },
+            "2": {
+            "name": "storage.modifier.libsl"
+            }
+          },
+          "end": ";",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.section.class.end.bracket.curly.java"
+          },
+          "patterns":[
+            {
+              "include": "name-with-type"
+            }
+          ]
+          }
+        }
+        ]
+      },
+      "name-with-type":{
+        "begin": "\\b(var)\\b\\s*",
+        "beginCaptures":{
+          "1": {
+            "name": "keyword.other.libsl.variable"
+          },
+          "2": {
+            "name": "storage.modifier.libsl"
+          }
+        },
+        "end": "}",
+        "endCaptures": {
+          "0": {
+            "name": "punctuation.section.class.end.bracket.curly.java"
+          }
+        }
+      },
+      "double-quoted-string":{
+        "begin": "\"",
+        "end": "\"",
+        "name": "string.quoted.double.skill",
+        "patterns": [
+            {
+                "name": "constant.character.escape.skill",
+                "match": "\\\\[\"\\\\]"
+            }
+        ]
+      },
+      "identifer":{
+        "match": "[_a-zA-Z][_a-zA-Z0-9]{0,30}",
+        "name": "identifier.identifier"
+      },
+      "integer-number":{
+        "patterns": [
+          {
+            "match": "(?x)\n\\b(?<!\\$)\n0(x|X)\n(\n  (?<!\\.)[0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[Ll]?(?!\\.)\n  |\n  (\n    [0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?\\.?\n    |\n    ([0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?)?\\.[0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?\n  )\n  [Pp][+-]?[0-9]([0-9_]*[0-9])?[FfDd]?\n)\n\\b(?!\\$)",
+            "name": "constant.numeric.hex.libsl"
+          },
+          {
+            "match": "\\b(?<!\\$)0(b|B)[01]([01_]*[01])?[Ll]?\\b(?!\\$)",
+            "name": "constant.numeric.binary.libsl"
+          },
+          {
+            "match": "\\b(?<!\\$)0[0-7]([0-7_]*[0-7])?[Ll]?\\b(?!\\$)",
+            "name": "constant.numeric.octal.libsl"
+          },
+          {
+            "match": "(?x)\n(?<!\\$)\n(\n  \\b[0-9]([0-9_]*[0-9])?\\.\\B(?!\\.)\n  |\n  \\b[0-9]([0-9_]*[0-9])?\\.([Ee][+-]?[0-9]([0-9_]*[0-9])?)[FfDd]?\\b\n  |\n  \\b[0-9]([0-9_]*[0-9])?\\.([Ee][+-]?[0-9]([0-9_]*[0-9])?)?[FfDd]\\b\n  |\n  \\b[0-9]([0-9_]*[0-9])?\\.([0-9]([0-9_]*[0-9])?)([Ee][+-]?[0-9]([0-9_]*[0-9])?)?[FfDd]?\\b\n  |\n  (?<!\\.)\\B\\.[0-9]([0-9_]*[0-9])?([Ee][+-]?[0-9]([0-9_]*[0-9])?)?[FfDd]?\\b\n  |\n  \\b[0-9]([0-9_]*[0-9])?([Ee][+-]?[0-9]([0-9_]*[0-9])?)[FfDd]?\\b\n  |\n  \\b[0-9]([0-9_]*[0-9])?([Ee][+-]?[0-9]([0-9_]*[0-9])?)?[FfDd]\\b\n  |\n  \\b(0|[1-9]([0-9_]*[0-9])?)(?!\\.)[Ll]?\\b\n)\n(?!\\$)",
+            "name": "constant.numeric.decimal.libsl"
+          }
+        ]
+      }
+    } 
+  }

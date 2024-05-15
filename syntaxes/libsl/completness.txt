@@ -1,0 +1,27 @@
+global statement
+    - ImportStatement
+   |   IncludeStatement
+   |   typesSection
+   |   typealiasStatement
+   |   typeDefBlock
+   |   enumBlock
+   |   annotationDecl
+   |   actionDecl
+   |   topLevelDecl
+
+
+   topLevelDecl
+   :   automatonDecl
+   |   functionDecl
+   |   variableDecl
+
+
+
+"beginCaptures": {
+            "1": {
+              "name": "keyword.other.libsl.version"
+            },
+            "2": {
+              "name": "storage.modifier.libsl"
+            }
+            },
